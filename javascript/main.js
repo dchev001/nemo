@@ -25,7 +25,7 @@ const marker3 = new mapboxgl.Marker()
 
 
 // to show the map layers
-function showLayers()
+function showMapSubMenu()
 {
   var x = document.getElementById("layerConsole");
   if (x.style.display === "none")
