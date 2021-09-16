@@ -1,0 +1,51 @@
+/*
+FIU colors
+blue       #081E3F
+gold       #FFCC00
+*/
+
+/* default */
+body { 
+  margin: 0; 
+  padding: 0; 
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* mapbox map */
+#map { 
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 100%; 
+}
+
+/* position the navbar container inside */
+.container {
+  position: absolute;
+  margin: 15px;
+  width: auto;
+  z-index: 1;
+}
+
+/* the navbar */
+.topnav {
+  overflow: hidden;
+  background-color: #081E3F;
+  color: white;
+}
+
+/* navbar links */
+.topnav a {
+  float: left;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* nav links on hover */
+.topnav a:hover {
+  background-color: white;
+  color: #081E3F;
+}
