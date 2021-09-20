@@ -38,6 +38,19 @@ function showMapSubMenu()
   }
 }
 
+// to show the data layers
+function showDataLayers()
+{
+  var x = document.getElementById("layerConsole");
+  if (x.style.display === "none")
+  {
+    x.style.display = "block";   
+  }
+  else
+  {
+    x.style.display = "none";
+  }
+}
 
 // to change between map styles
 function changeMap(val)
