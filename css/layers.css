@@ -1,0 +1,44 @@
+#layerConsole {
+  position: absolute;
+  margin: 10px;
+  width: 250px;
+  background-color: white;
+  padding: 0px;
+  top: 60px;
+  left: 5px;
+  z-index: 1;
+  display: none;
+}
+
+h1 {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+h2 {
+  font-size: 15px;
+}
+
+.session {
+  margin-bottom: 20px;
+}
+
+.row {
+  height: 12px;
+  width: 100%;
+}
+
+.colors {
+  border: 1px solid black;
+  background: linear-gradient(
+    to right,
+    white    
+  );
+  margin-bottom: 5px;
+}
+
+.label {
+  width: 15%;
+  display: inline-block;
+  text-align: center;
+}
