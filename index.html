@@ -25,8 +25,6 @@
     <!-- menu container -->
     <div class="container">
       <div class="topnav">
-        <a href="https://crestcache.fiu.edu/index.html">
-          <img src="images/fiu-white-logo.png" alt="FIU Logo" width="45px" height="16px"></a>
         <a href="#" onclick="showDataLayers()"><i class="fas fa-layer-group"></i></a>    
         <a href="#" onclick="showMapSubMenu()"><i class="fas fa-map"></i></a>
       </div>
@@ -55,39 +53,31 @@
 
 
     <!-- Layer Console -->
-    <div id="layerConsole">
-      <h1>Layers</h1>
-    
+    <div id="mapKeyLegend">
       <!-- drop down list of the data -->
-      <div class="session">
-        <select name="dataLayers" id="dataLayer" onchange="changeLegendGradient()">
-          <option value="none">None</option>
-          <option value="temp">Temperature</option>
+      <div class="dropDownList">
+        <select name="dataLayers" id="dataLayer" onchange="changeLegend()">
+          <option value="temp" selected>Temperature</option>
           <option value="pH_level">pH Level</option>
           <option value="odo">Dissolved Oxygen</option>
           <option value="salinity">Salinity</option>
           <option value="chlorophyll">Chlorophyll</option>
           <option value="turbidity">Turbidity</option>
         </select>
-      </div>     
-
-      <!-- the map legend gradient -->
-      <div class="session">
-        <h2>Key</h2>
-        <div class="row colors" id="grad"></div>
-          
-        <div class="row labels" id="gradNum">
-          <div class="label">0</div>
-          <div class="label">1</div>
-          <div class="label">2</div>
-          <div class="label">3</div>
-          <div class="label">4</div>
-          <div class="label">5</div>
-        </div>       
-      
       </div>
+      <!-- drop down list end -->     
+
+      <!-- map legend -->
+      <div class="gradContainer" id="gradNum">
+      </div>
+      <!-- map legend end -->
 
     </div>
+    <!-- layer console end -->
+
+<script>
+
+</script>
 
 
   </body>

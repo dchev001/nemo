@@ -1,44 +1,47 @@
-#layerConsole {
+#mapKeyLegend {
   position: absolute;
   margin: 10px;
-  width: 250px;
+  width: 200px;
   background-color: white;
   padding: 0px;
+  padding-top: 15px;
   top: 60px;
   left: 5px;
   z-index: 1;
+  border-radius: 5px;
   display: none;
 }
 
-h1 {
-  font-size: 20px;
-  line-height: 30px;
+.dropDownList {
+  margin-bottom: 10px;
+  padding-left: 15px;
 }
 
-h2 {
-  font-size: 15px;
-}
-
-.session {
-  margin-bottom: 20px;
-}
+.gradContainer {
+  padding: 0px;
+  margin: 15px;
+} 
 
 .row {
-  height: 12px;
   width: 100%;
-}
-
-.colors {
-  border: 1px solid black;
-  background: linear-gradient(
-    to right,
-    white    
-  );
-  margin-bottom: 5px;
+  display: inline-block;
+  padding: 5px;
 }
 
 .label {
-  width: 15%;
+  display: inline;
+}
+
+.label p {
+  display: inline;
+  padding-left: 15px;
+  font-size: 22px;
+}
+
+.gradBox {
+  width: 16px;
+  height: 16px;
   display: inline-block;
-  text-align: center;
+  border-radius: 25px;
+  border: 1px solid black;
 }

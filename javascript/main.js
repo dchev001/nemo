@@ -41,7 +41,7 @@ function showMapSubMenu()
 // to show the data layers
 function showDataLayers()
 {
-  var x = document.getElementById("layerConsole");
+  var x = document.getElementById("mapKeyLegend");
   if (x.style.display === "none")
   {
     x.style.display = "block";   
@@ -58,43 +58,110 @@ function changeMap(val)
   map.setStyle('mapbox://styles/mapbox/' + val);
 }
 
-// to change the gradient in the layer console
-function changeLegendGradient() 
+// to change the map legend key
+function changeLegend()
 {
   var x = document.getElementById("dataLayer").value;
-  var y = document.getElementById("grad");
+  z = document.getElementById("gradNum");
+  y = document.getElementsByClassName("gradBox");
 
+  var arr = [];
+  var txt = '';  
+ 
   if (x == 'temp')
-  {
-    y.style.background = "linear-gradient(to right, green, white, red)";
+  { 
+    arr = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+    col = ['blue', 'red', 'orange', 'pink', 'yellow', 'black', 'purple', 'navy', 'red', 'blue'];
+
+    for (x in arr, col)
+    { 
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
   }
   else if (x == 'pH_level')
-  {
-    y.style.background = "linear-gradient(to right, blue, white, red)";
+  { 
+    arr = ['0-1', '1-2', '2-3', '3-4', '4-5'];
+    col = ['red', 'orange', 'orange', 'orange', 'yellow'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
   }
   else if (x == 'odo')
-  {
-    y.style.background = "linear-gradient(to right, yellow, red, orange)";  
+  { 
+    arr = ['<1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', '9-10', '10-11', '11-12', '12>'];
+    col = ['purple', 'red', 'orange', 'pink', 'yellow', 'black', 'blue', 'violet', 'green', 'red', 'blue', 'orange', 'green'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
   }
   else if (x == 'salinity')
-  {
-    y.style.background = "linear-gradient(to right, green, white, red, green)";
+  { 
+    arr = [1, 2, 3, 4];
+    col = ['red', 'blue', 'pink', 'yellow'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
   }
   else if (x == 'chlorophyll')
-  {
-    y.style.background = "linear-gradient(to right, blue, white, blue, white)";
+  { 
+    arr = [ 1, 2, 3, 4, 5];
+    col = ['red', 'white', 'blue', 'green', 'black'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
   }
   else if (x == 'turbidity')
-  {
-    y.style.background = "linear-gradient(to right, blue, red, blue, green)";
-  }
-  else if (x == 'none')
-  {
-    y.style.background = "linear-gradient(to right, white, white)";
-  }
-  else
-  {
-    y.style.background = "linear-gradient(to right, white, white)";
-  }
-}
+  { 
+    arr = [1, 2, 3];
+    col = ['red', 'white', 'blue'];
 
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }
+  }  
+  else if (x == 'none')
+  { 
+    arr = [0];
+    col = ['white'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<p></p>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    }    
+  } 
+  else
+  { 
+    arr = [0];
+    col = ['white'];
+
+    for (x in arr, col)
+    {
+      z.innerHTML = txt + '<p></p>';
+      y[x].style.background = col[x];
+      txt = z.innerHTML;
+    } 
+  }   
+}
