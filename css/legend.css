@@ -1,0 +1,47 @@
+#mapLegend {
+  position: absolute;
+  margin: 10px;
+  width: 170px;
+  background-color: rgb(255, 255, 255);
+  padding: 0px;
+  padding-top: 15px;
+  top: 60px;
+  left: 5px;
+  z-index: 1;
+  border-radius: 5px;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0px 0px 2px;
+  display: none;
+}
+
+.dropDownList {
+  margin-bottom: 10px;
+  padding-left: 15px;
+}
+
+.gradContainer {
+  padding: 0px;
+  margin: 15px;
+} 
+
+.row {
+  width: 100%;
+  display: inline-block;
+}
+
+.label {
+  display: inline;
+}
+
+.label p {
+  display: inline;
+  padding-left: 15px;
+  font-size: 22px;
+  color: black;
+}
+
+.gradBox {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  border-radius: 25px;
+}
