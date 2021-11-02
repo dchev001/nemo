@@ -10,45 +10,58 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoZXYwMDEiLCJhIjoiY2t0NmtzaDZrMGpnODJvbGFiZ
 // add zoom and rotation controls to the map
 map.addControl(new mapboxgl.NavigationControl());
 
+// add scale control to the map
+const scale = new mapboxgl.ScaleControl({
+  maxWidth: 100,
+  unit: 'imperial'
+});
+map.addControl(scale, 'bottom-right');
+scale.setUnit('imperial');
+
 // create a default marker and add it to the map
-const marker1 = new mapboxgl.Marker()
+const marker1 = new mapboxgl.Marker({color: '#081E3F'})
 .setLngLat([-80.26966, 25.72695])
 .addTo(map);
   
-const marker2 = new mapboxgl.Marker()
+const marker2 = new mapboxgl.Marker({color: '#081E3F'})
 .setLngLat([-80.16712, 25.86171])
 .addTo(map);
   
-const marker3 = new mapboxgl.Marker()
+const marker3 = new mapboxgl.Marker({color: '#081E3F'})
 .setLngLat([-80.176921, 25.846346])
 .addTo(map);
-
 
 // to show the map layers
 function showMapSubMenu()
 {
-  var x = document.getElementById("mapConsole");
-  if (x.style.display === "none")
+  var map = document.getElementById("mapConsole");
+  var lay = document.getElementById("mapLegend");
+
+  if (map.style.display === "block")
   {
-    x.style.display = "block";
+    map.style.display = "none";
   }
   else
   {
-    x.style.display = "none";
+    map.style.display = "block";
+    lay.style.display = "none";
   }
 }
 
 // to show the data layers
 function showDataLayers()
 {
-  var x = document.getElementById("mapKeyLegend");
-  if (x.style.display === "none")
+  var map = document.getElementById("mapConsole");
+  var lay = document.getElementById("mapLegend");
+
+  if (lay.style.display === "block")
   {
-    x.style.display = "block";   
+    lay.style.display = "none";   
   }
   else
   {
-    x.style.display = "none";
+    lay.style.display = "block";
+    map.style.display = "none";
   }
 }
 
@@ -61,107 +74,304 @@ function changeMap(val)
 // to change the map legend key
 function changeLegend()
 {
-  var x = document.getElementById("dataLayer").value;
+  x = document.getElementById("dataLayer").value;
   z = document.getElementById("gradNum");
   y = document.getElementsByClassName("gradBox");
 
-  var arr = [];
-  var txt = '';  
- 
   if (x == 'temp')
   { 
-    arr = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-    col = ['blue', 'red', 'orange', 'pink', 'yellow', 'black', 'purple', 'navy', 'red', 'blue'];
+    arr = ['< 30', '30 - 31', '31-32', '32-33', '33 >'];
+    col = ['green', 'red', 'blue', 'yellow', 'purple'];
 
-    for (x in arr, col)
-    { 
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
+    disLegend(arr, col);
+
+    /* Layer for temp */
+    map.addLayer({
+      'id' : 'temp',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'Temp °C'],
+          5,
+          30.0,
+          6.5,
+          31.0,
+          8,
+          32.0,
+          9.5,
+          33.0,
+          10,
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'Temp °C'],
+          'green',
+          30.0,
+          'red',
+          31.0,
+          'blue',
+          32.0,
+          'yellow',
+          33.0,
+          'purple',
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
   }
-  else if (x == 'pH_level')
-  { 
-    arr = ['0-1', '1-2', '2-3', '3-4', '4-5'];
-    col = ['red', 'orange', 'orange', 'orange', 'yellow'];
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
+  if (x == 'pH_level')
+  { 
+    arr = ['< 7.0', '7.0-7.5', '7.5-7.75', '7.75-8.0', '8.0 > '];
+    col = ['red', 'blue', 'green', 'yellow', 'orange'];
+    
+    disLegend(arr, col);
+
+    /* Layer for ph */
+    map.addLayer({
+      'id' : 'ph',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'pH'],
+          5,
+          7.0,
+          6,
+          7.5,
+          7,
+          7.75,
+          8,
+          8.0,
+          9
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        //'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'pH'],
+          'red',
+          7.0,
+          'blue',
+          7.5,
+          'green',
+          7.75,
+          'yellow',
+          8.0,
+          'orange',
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
   }
-  else if (x == 'odo')
-  { 
-    arr = ['<1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', '9-10', '10-11', '11-12', '12>'];
-    col = ['purple', 'red', 'orange', 'pink', 'yellow', 'black', 'blue', 'violet', 'green', 'red', 'blue', 'orange', 'green'];
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
+  if (x == 'odo')
+  { 
+    arr = ['< 2', '2-3', '3-4', '4-5', '5 >'];
+    col = ['purple', 'red', 'orange', 'pink', 'blue'];
+
+    disLegend(arr, col);
+
+    /* Layer for odo */
+    map.addLayer({
+      'id' : 'odo',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'ODO mg/L'],
+          5,
+          2.0,
+          6,
+          3.0,
+          7,
+          4.0,
+          8,
+          5.0,
+          9
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        //'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'ODO mg/L'],
+          'purple',
+          2.0,
+          'red',
+          3.0,
+          'orange',
+          4.0,
+          'pink',
+          5.0,
+          'blue',
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
   }
-  else if (x == 'salinity')
-  { 
-    arr = [1, 2, 3, 4];
-    col = ['red', 'blue', 'pink', 'yellow'];
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
+  if (x == 'salinity')
+  { 
+    arr = [' < 25', '25-27', '27-29', ' 29 >' ];
+    col = ['red', 'green', 'blue', 'yellow'];
+   
+    disLegend(arr, col);
+
+    /* Layer for salinty */
+    map.addLayer({
+      'id' : 'salinity',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'Sal psu'],
+          5,
+          25.0,
+          6.5,
+          27.0,
+          8,
+          29.0,
+          9.5,
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'Sal psu'],
+          'red',
+          25.0,
+          'green',
+          27.0,
+          'blue',
+          29.0,
+          'yellow'
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
   }
-  else if (x == 'chlorophyll')
-  { 
-    arr = [ 1, 2, 3, 4, 5];
-    col = ['red', 'white', 'blue', 'green', 'black'];
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
+  if (x == 'chlorophyll')
+  { 
+    arr = [' < 2', '2-5', ' 5 >'];
+    col = ['red', 'blue', 'green'];
+   
+    disLegend(arr, col);
+
+    /* Layer for chlorophyll */
+    map.addLayer({
+      'id' : 'chlorophyll',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'Chlorophyll ug/L'],
+          5,
+          2.0,
+          3,
+          5.0,
+          4
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'Chlorophyll ug/L'],
+          'red',
+          2.0,
+          'green',
+          5.0,
+          'blue'
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
   }
-  else if (x == 'turbidity')
-  { 
-    arr = [1, 2, 3];
-    col = ['red', 'white', 'blue'];
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }
-  }  
-  else if (x == 'none')
+  if (x == 'turbidity')
   { 
-    arr = [0];
-    col = ['white'];
+    arr = ['< 10', '10-20', '20 > '];
+    col = ['red', 'blue', 'orange'];
+   
+    disLegend(arr, col);
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<p></p>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    }    
-  } 
-  else
-  { 
-    arr = [0];
-    col = ['white'];
+    /* Layer for turbidity */
+    map.addLayer({
+      'id' : 'turbidity',
+      'type' : 'circle',
+      'source' : 'data_all',
+      paint: {
+        'circle-radius': [
+          'step',
+          ['get', 'Turbidity FNU'],
+          5,
+          10.0,
+          6,
+          20.0,
+          8
+        ],
+        'circle-stroke-width': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          1,
+          0.1
+          ],
+        'circle-stroke-color': '#000',
+        'circle-color': [
+          'step',
+          ['get', 'Turbidity FNU'],
+          'red',
+          10.0,
+          'blue',
+          20.0,
+          'orange'
+        ],
+        'circle-opacity': 0.7
+      },        
+    });
+  }
+}
 
-    for (x in arr, col)
-    {
-      z.innerHTML = txt + '<p></p>';
-      y[x].style.background = col[x];
-      txt = z.innerHTML;
-    } 
-  }   
+function disLegend(arr, col)
+{
+  var txt = ''; 
+  for (x in arr, col)
+  {
+    z.innerHTML = txt + '<div class=\"row\"><div class=\"gradBox\"></div><div class=\"label\"><p>' + arr[x] + '</p></div></div>';
+    y[x].style.background = col[x];
+    txt = z.innerHTML;
+  }
 }
