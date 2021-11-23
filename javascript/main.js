@@ -1,4 +1,4 @@
-// map
+// mapbox info
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGNoZXYwMDEiLCJhIjoiY2t0NmtzaDZrMGpnODJvbGFiZWM0aGM5MCJ9.11rBAOn9SrSUYjN87mGGmA';
   const map = new mapboxgl.Map({
   container: 'map', // container ID
@@ -31,37 +31,117 @@ const marker3 = new mapboxgl.Marker({color: '#081E3F'})
 .setLngLat([-80.176921, 25.846346])
 .addTo(map);
 
+// create Layer class with methods
+class Layer {
+  constructor(name, status) {
+    this.name = name;
+    this.status = status;
+  }
+
+  getName() { return this.name; }
+  getStatus() { return this.status; }
+  setName(name) { this.name = name; }
+  setStatus(status) { this.status = status; }
+
+  toString() {
+    console.log(this.name + " : " + this.status);
+  }
+}
+
+// create layer objects
+var ph_arr = new Layer('ph', false);
+var temp_arr = new Layer('temp', false);
+var odo_arr = new Layer('odo', false);
+var salinity_arr = new Layer('salinity', false);
+var turbidity_arr = new Layer('turbidity', false);
+var chlorophyll_arr = new Layer('chlorophyll', false);
+
+// create array
+let layers = [];
+layers.push(ph_arr);
+layers.push(temp_arr);
+layers.push(odo_arr);
+layers.push(salinity_arr);
+layers.push(turbidity_arr);
+layers.push(chlorophyll_arr);
+
+// remove layers/source
+function removeLayers()
+{
+  for (x in layers)
+  {
+    if (layers[x].getStatus() == true)
+    {
+      map.removeLayer(layers[x].getName());
+    }
+  }
+}
+
+// to display certain layers for map styles
+function showOnlyActiveLayers()
+{
+  for (x in layers)
+  {
+    if (layers[x].getStatus() == true)
+    {
+      if (layers[x].getName() == 'ph')
+      {
+        addLayerPh();
+      }
+    }
+  }
+}
+
 // to show the map layers
 function showMapSubMenu()
 {
-  var map = document.getElementById("mapConsole");
-  var lay = document.getElementById("mapLegend");
+  var styles = document.getElementById("mapStyles");
+  var layers = document.getElementById("mapLayers");
+  var legend = document.getElementById("mapKey");
 
-  if (map.style.display === "block")
+  if (styles.style.display === "block")
   {
-    map.style.display = "none";
+    styles.style.display = "none";
   }
   else
   {
-    map.style.display = "block";
-    lay.style.display = "none";
+    styles.style.display = "block";
+    layers.style.display = "none";
+    legend.style.display = "none";
   }
 }
 
 // to show the data layers
 function showDataLayers()
 {
-  var map = document.getElementById("mapConsole");
-  var lay = document.getElementById("mapLegend");
+  var styles = document.getElementById("mapStyles");
+  var layers = document.getElementById("mapLayers");
+  var legend = document.getElementById("mapKey");
 
-  if (lay.style.display === "block")
+  if (layers.style.display === "block")
   {
-    lay.style.display = "none";   
+    layers.style.display = "none";
+    legend.style.display = "none";
   }
   else
   {
-    lay.style.display = "block";
-    map.style.display = "none";
+    layers.style.display = "block";
+    styles.style.display = "none";
+  }
+}
+
+// to show data info box
+function showDataInfoBox()
+{
+  var box = document.getElementById("dataInfoBox");
+
+  if (box.style.display === "block")
+  {
+    box.style.display = "none";
+  }
+  else
+  {
+    box.style.display = "block";
   }
 }
 
@@ -69,299 +149,93 @@ function showDataLayers()
 function changeMap(val)
 {
   map.setStyle('mapbox://styles/mapbox/' + val);
+  //showOnlyActiveLayers();
 }
 
 // to change the map legend key
-function changeLegend()
+function changeLegend(val)
 {
-  x = document.getElementById("dataLayer").value;
+  document.getElementById("mapKey").style.display = "block";
+
   z = document.getElementById("gradNum");
   y = document.getElementsByClassName("gradBox");
 
-  if (x == 'temp')
+  if (val == 'temp_level')
   { 
-    arr = ['< 30', '30 - 31', '31-32', '32-33', '33 >'];
+    arr = ['< 30 °C', '30 - 31 °C', '31 - 32 °C', '32 - 33 °C', '33 °C >'];
     col = ['green', 'red', 'blue', 'yellow', 'purple'];
-
     disLegend(arr, col);
 
-    /* Layer for temp */
-    map.addLayer({
-      'id' : 'temp',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'Temp °C'],
-          5,
-          30.0,
-          6.5,
-          31.0,
-          8,
-          32.0,
-          9.5,
-          33.0,
-          10,
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'Temp °C'],
-          'green',
-          30.0,
-          'red',
-          31.0,
-          'blue',
-          32.0,
-          'yellow',
-          33.0,
-          'purple',
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+
+    temp_arr.setStatus(true);
+    addLayerTemp();
+    dataPoints('temp');
   }
 
-  if (x == 'pH_level')
+  if (val == 'pH_level')
   { 
-    arr = ['< 7.0', '7.0-7.5', '7.5-7.75', '7.75-8.0', '8.0 > '];
+    arr = ['< 7.0', '7.0 - 7.5', '7.5 - 7.75', '7.75 - 8.0', '8.0 > '];
     col = ['red', 'blue', 'green', 'yellow', 'orange'];
-    
     disLegend(arr, col);
 
-    /* Layer for ph */
-    map.addLayer({
-      'id' : 'ph',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'pH'],
-          5,
-          7.0,
-          6,
-          7.5,
-          7,
-          7.75,
-          8,
-          8.0,
-          9
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        //'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'pH'],
-          'red',
-          7.0,
-          'blue',
-          7.5,
-          'green',
-          7.75,
-          'yellow',
-          8.0,
-          'orange',
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+
+    ph_arr.setStatus(true);
+    addLayerPh();
+    dataPoints('ph');
   }
 
-  if (x == 'odo')
+  if (val == 'odo_level')
   { 
-    arr = ['< 2', '2-3', '3-4', '4-5', '5 >'];
+    arr = ['< 2 mg/L', '2 - 3 mg/L', '3 - 4 mg/L', '4 - 5 mg/L', '5 mg/L >'];
     col = ['purple', 'red', 'orange', 'pink', 'blue'];
-
     disLegend(arr, col);
 
-    /* Layer for odo */
-    map.addLayer({
-      'id' : 'odo',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'ODO mg/L'],
-          5,
-          2.0,
-          6,
-          3.0,
-          7,
-          4.0,
-          8,
-          5.0,
-          9
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        //'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'ODO mg/L'],
-          'purple',
-          2.0,
-          'red',
-          3.0,
-          'orange',
-          4.0,
-          'pink',
-          5.0,
-          'blue',
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+
+    odo_arr.setStatus(true);
+    addLayerOdo();
+    dataPoints('odo');
   }
 
-  if (x == 'salinity')
+  if (val == 'sal_level')
   { 
-    arr = [' < 25', '25-27', '27-29', ' 29 >' ];
+    arr = [' < 25 psu', '25 - 27 psu', '27 - 29 psu', ' 29 psu >' ];
     col = ['red', 'green', 'blue', 'yellow'];
-   
     disLegend(arr, col);
 
-    /* Layer for salinty */
-    map.addLayer({
-      'id' : 'salinity',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'Sal psu'],
-          5,
-          25.0,
-          6.5,
-          27.0,
-          8,
-          29.0,
-          9.5,
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'Sal psu'],
-          'red',
-          25.0,
-          'green',
-          27.0,
-          'blue',
-          29.0,
-          'yellow'
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+    
+    salinity_arr.setStatus(true);
+    addLayerSalinity();
+    dataPoints('salinity');
   }
 
-  if (x == 'chlorophyll')
+  if (val == 'ch_level')
   { 
-    arr = [' < 2', '2-5', ' 5 >'];
+    arr = [' < 2 ug/L', '2 - 5 ug/L', ' 5 ug/L >'];
     col = ['red', 'blue', 'green'];
-   
     disLegend(arr, col);
 
-    /* Layer for chlorophyll */
-    map.addLayer({
-      'id' : 'chlorophyll',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'Chlorophyll ug/L'],
-          5,
-          2.0,
-          3,
-          5.0,
-          4
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'Chlorophyll ug/L'],
-          'red',
-          2.0,
-          'green',
-          5.0,
-          'blue'
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+    
+    chlorophyll_arr.setStatus(true);
+    addLayerCholrophyll();
+    dataPoints('chlorophyll');
   }
 
-  if (x == 'turbidity')
+  if (val == 'tur_level')
   { 
-    arr = ['< 10', '10-20', '20 > '];
-    col = ['red', 'blue', 'orange'];
-   
+    arr = ['< 10 FNU', '10 - 20 FNU', '20 FNU > '];
+    col = ['red', 'blue', 'orange'];  
     disLegend(arr, col);
 
-    /* Layer for turbidity */
-    map.addLayer({
-      'id' : 'turbidity',
-      'type' : 'circle',
-      'source' : 'data_all',
-      paint: {
-        'circle-radius': [
-          'step',
-          ['get', 'Turbidity FNU'],
-          5,
-          10.0,
-          6,
-          20.0,
-          8
-        ],
-        'circle-stroke-width': [
-          'case',
-          ['boolean', ['feature-state', 'hover'], false],
-          1,
-          0.1
-          ],
-        'circle-stroke-color': '#000',
-        'circle-color': [
-          'step',
-          ['get', 'Turbidity FNU'],
-          'red',
-          10.0,
-          'blue',
-          20.0,
-          'orange'
-        ],
-        'circle-opacity': 0.7
-      },        
-    });
+    removeLayers();
+
+    turbidity_arr.setStatus(true);
+    addLayerTurbidity();
+    dataPoints('turbidity');
   }
 }
 
@@ -375,3 +249,4 @@ function disLegend(arr, col)
     txt = z.innerHTML;
   }
 }
+
