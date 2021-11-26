@@ -8,8 +8,6 @@
     
     <!-- css -->
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/mapLayers.css">
-    <link rel="stylesheet" href="css/mapStyles.css">
     
     <!-- mapbox -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
@@ -22,67 +20,73 @@
   </head>
 
   <body>
-    <!-- menu container begin -->
-    <div class="container">
-      <div class="topnav">
-        <a href="#" onclick="showDataLayers()"><i class="fas fa-layer-group"></i></a>    
-        <a href="#" onclick="showMapSubMenu()"><i class="fas fa-map"></i></a>
-        <a href="#" onclick="showDataInfoBox()"><i class="fas fa-info-circle"></i></a>
-      </div>
-    </div>
-    <!-- menu container end -->
- 
-    <!-- map -->
 
-    <div id="map"></div>
+     <!-- map container begin -->
+    <div class="mapContainer">
+      <!-- map begin -->
+      <div id="map">
+        <!-- menu container begin -->
+        <div class="container">
+          <div class="topnav">
+            <a href="#" onclick="showDataLayers()"><i class="fas fa-layer-group"></i></a>    
+            <a href="#" onclick="showMapSubMenu()"><i class="fas fa-map"></i></a>
+            <a href="#" onclick="showDataInfoBox()"><i class="fas fa-info-circle"></i></a>
+          </div>
+        </div>
+        <!-- menu container end -->
+
+        <!-- map styles begin -->
+        <div id="mapStyles">
+          <div class="items">
+            <a onclick="changeMap('satellite-v9')">Satellite</a>
+            <a onclick="changeMap('light-v10')">Light</a>
+            <a onclick="changeMap('dark-v10')">Dark</a>
+            <a onclick="changeMap('streets-v11')">Streets</a>
+            <a onclick="changeMap('outdoors-v11')">Outdoors</a>     
+          </div>
+        </div>
+        <!-- map styles end -->
+
+        <!-- map layers begin -->
+        <div id="mapLayers">
+          <div class="items">
+            <a onclick="changeLegend('temp_level')">Temperature</a>
+            <a onclick="changeLegend('odo_level')">Dissolved Oxygen</a>
+            <a onclick="changeLegend('pH_level')">pH Level</a>
+            <a onclick="changeLegend('tur_level')">Turbidity</a>
+            <a onclick="changeLegend('sal_level')">Salinity</a>
+            <a onclick="changeLegend('ch_level')">Chlorophyll</a>    
+          </div>
+        </div>
+        <!-- map layers end-->
+
+        <!-- map key begin -->
+        <div id="mapKey">
+          <div class="gradContainer" id="gradNum"></div>
+        </div>
+        <!-- map key end -->
+
+        <!-- Data info console begin -->
+        <div id="dataInfoBox"> 
+          <div><strong>Date:</strong> <span id='date_info'></span></div>
+          <div><strong>Time:</strong> <span id='time_info'></span></div>
+          <div><strong>Temp °C:</strong> <span id='temp_info'></span></div>
+          <div><strong>pH:</strong> <span id='ph_info'></span></div>
+          <div><strong>odo:</strong> <span id='odo_info'></span></div>
+          <div><strong>Turbidity:</strong> <span id='turbidity_info'></span></div>
+          <div><strong>Salinity:</strong> <span id='salinity_info'></span></div>
+          <div><strong>Chlorophyll:</strong> <span id='chlorophyll_info'></span></div>
+        </div>
+        <!-- Data info console end -->
+      </div>
+      <!-- map end -->     
+    </div>
+    <!-- map container end -->
+
 
     <!-- javascript -->
     <script src="javascript/main.js"></script>
     <script src="javascript/dataInfo.js"></script>
-    
-    <!-- map styles begin -->
-    <div id="mapStyles">
-      <div class="items">
-        <a onclick="changeMap('satellite-v9')">Satellite</a>
-        <a onclick="changeMap('light-v10')">Light</a>
-        <a onclick="changeMap('dark-v10')">Dark</a>
-        <a onclick="changeMap('streets-v11')">Streets</a>
-        <a onclick="changeMap('outdoors-v11')">Outdoors</a>     
-      </div>
-    </div>
-    <!-- map styles end -->
 
-    <!-- map layers begin -->
-    <div id="mapLayers">
-      <div class="items">
-        <a onclick="changeLegend('temp_level')">Temperature</a>
-        <a onclick="changeLegend('odo_level')">Dissolved Oxygen</a>
-        <a onclick="changeLegend('pH_level')">pH Level</a>
-        <a onclick="changeLegend('tur_level')">Turbidity</a>
-        <a onclick="changeLegend('sal_level')">Salinity</a>
-        <a onclick="changeLegend('ch_level')">Chlorophyll</a>    
-      </div>
-    </div>
-    <!-- map layers end-->
-
-    <!-- map key begin -->
-    <div id="mapKey">
-      <div class="gradContainer" id="gradNum">
-      </div>
-    </div>
-    <!-- map key end -->
-
-    <!-- Data info console begin -->
-    <div id="dataInfoBox"> 
-      <div><strong>Date:</strong> <span id='date_info'></span></div>
-      <div><strong>Time:</strong> <span id='time_info'></span></div>
-      <div><strong>Temp °C:</strong> <span id='temp_info'></span></div>
-      <div><strong>pH:</strong> <span id='ph_info'></span></div>
-      <div><strong>odo:</strong> <span id='odo_info'></span></div>
-      <div><strong>Turbidity:</strong> <span id='turbidity_info'></span></div>
-      <div><strong>Salinity:</strong> <span id='salinity_info'></span></div>
-      <div><strong>Chlorophyll:</strong> <span id='chlorophyll_info'></span></div>
-    </div>
-    <!-- Data info console end -->
   </body>
 </html>
