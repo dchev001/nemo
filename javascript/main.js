@@ -84,10 +84,7 @@ function showOnlyActiveLayers()
   {
     if (layers[x].getStatus() == true)
     {
-      if (layers[x].getName() == 'ph')
-      {
-        addLayerPh();
-      }
+      map.addLayer(layers[x].getName());
     }
   }
 }
@@ -150,6 +147,7 @@ function changeMap(val)
 {
   map.setStyle('mapbox://styles/mapbox/' + val);
   //showOnlyActiveLayers();
+  map.on('load', () => {console.log("even occured");});
 }
 
 // to change the map legend key

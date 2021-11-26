@@ -265,62 +265,62 @@ function addLayerTurbidity()
 
 function dataPoints(selectLayer)
 {
-/* data hover point info process */
-let hoverStatus = null;
+  /* data hover point info process */
+  let hoverStatus = null;
 
-/* when mouse hover on data point */
-map.on('mouseenter', selectLayer, (e) => {
-  map.getCanvas().style.cursor = 'pointer';
+  /* when mouse hover on data point */
+  map.on('mouseenter', selectLayer, (e) => {
+    map.getCanvas().style.cursor = 'pointer';
 
-  /* get info from geojson file  */
-  const temp_val = e.features[0].properties["Temp °C"];
-  const ph_val = e.features[0].properties["pH"];
-  const odo_val = e.features[0].properties["ODO mg/L"];
-  const turbidity_val = e.features[0].properties["Turbidity FNU"];
-  const salinity_val = e.features[0].properties["Sal psu"];
-  const chlorophyll_val = e.features[0].properties["Chlorophyll ug/L"];
-  const date_val = e.features[0].properties["Timestamp"];
+    /* get info from geojson file  */
+    const temp_val = e.features[0].properties["Temp °C"];
+    const ph_val = e.features[0].properties["pH"];
+    const odo_val = e.features[0].properties["ODO mg/L"];
+    const turbidity_val = e.features[0].properties["Turbidity FNU"];
+    const salinity_val = e.features[0].properties["Sal psu"];
+    const chlorophyll_val = e.features[0].properties["Chlorophyll ug/L"];
+    const date_val = e.features[0].properties["Timestamp"];
 
-  /* setup the date */
-  dt = new Date(date_val);
-  months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  full_months = months[dt.getMonth()];
+    /* setup the date */
+    dt = new Date(date_val);
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    full_months = months[dt.getMonth()];
 
-  full_date = full_months + " " + dt.getDate() + ", " + dt.getFullYear();   
+    full_date = full_months + " " + dt.getDate() + ", " + dt.getFullYear();   
 
-  if (dt.getHours() > 12 ? ampm = 'pm' : ampm = 'am');
-  if (dt.getHours() > 12 ? hr = dt.getHours()-12 : hr = dt.getHours());
-  if (hr <=9 ? hr = '0'+ hr : hr);
-  if (dt.getMinutes() <= 9 ? mnt = '0' + dt.getMinutes() : mnt = dt.getMinutes()); 
-  if (dt.getSeconds() <= 9 ? sec = '0' + dt.getSeconds() : sec = dt.getSeconds());
+    if (dt.getHours() > 12 ? ampm = 'pm' : ampm = 'am');
+    if (dt.getHours() > 12 ? hr = dt.getHours()-12 : hr = dt.getHours());
+    if (hr <=9 ? hr = '0'+ hr : hr);
+    if (dt.getMinutes() <= 9 ? mnt = '0' + dt.getMinutes() : mnt = dt.getMinutes()); 
+    if (dt.getSeconds() <= 9 ? sec = '0' + dt.getSeconds() : sec = dt.getSeconds());
 
-  full_time = hr + ":" + mnt + ":" + sec + " " + ampm;  
+    full_time = hr + ":" + mnt + ":" + sec + " " + ampm;  
 
-  //full_time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    //full_time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 
-  /* put data point info onto map */
-  document.getElementById("temp_info").innerHTML = temp_val;
-  document.getElementById("time_info").innerHTML = full_time;
-  document.getElementById("ph_info").innerHTML = ph_val;
-  document.getElementById("odo_info").innerHTML = odo_val;
-  document.getElementById("turbidity_info").innerHTML = turbidity_val;
-  document.getElementById("salinity_info").innerHTML = salinity_val;
-  document.getElementById("chlorophyll_info").innerHTML = chlorophyll_val;
-  document.getElementById("date_info").innerHTML = full_date;
-});
+    /* put data point info onto map */
+    document.getElementById("temp_info").innerHTML = temp_val;
+    document.getElementById("time_info").innerHTML = full_time;
+    document.getElementById("ph_info").innerHTML = ph_val;
+    document.getElementById("odo_info").innerHTML = odo_val;
+    document.getElementById("turbidity_info").innerHTML = turbidity_val;
+    document.getElementById("salinity_info").innerHTML = salinity_val;
+    document.getElementById("chlorophyll_info").innerHTML = chlorophyll_val;
+    document.getElementById("date_info").innerHTML = full_date;
+  });
 
-/* when mouse hover off data point */
-map.on('mouseleave', selectLayer, () => {
-  map.getCanvas().style.cursor = '';
+  /* when mouse hover off data point */
+  map.on('mouseleave', selectLayer, () => {
+    map.getCanvas().style.cursor = '';
 
-  /* to clear data point info */
-  document.getElementById("temp_info").innerHTML = '';
-  document.getElementById("time_info").innerHTML = '';
-  document.getElementById("ph_info").innerHTML = '';
-  document.getElementById("odo_info").innerHTML = '';
-  document.getElementById("turbidity_info").innerHTML = '';
-  document.getElementById("salinity_info").innerHTML = '';
-  document.getElementById("chlorophyll_info").innerHTML = '';
-  document.getElementById("date_info").innerHTML = '';
-});
+    /* to clear data point info */
+    document.getElementById("temp_info").innerHTML = '';
+    document.getElementById("time_info").innerHTML = '';
+    document.getElementById("ph_info").innerHTML = '';
+    document.getElementById("odo_info").innerHTML = '';
+    document.getElementById("turbidity_info").innerHTML = '';
+    document.getElementById("salinity_info").innerHTML = '';
+    document.getElementById("chlorophyll_info").innerHTML = '';
+    document.getElementById("date_info").innerHTML = '';
+  });
 }
