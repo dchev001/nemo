@@ -10,3 +10,5 @@ Map features:
 *_Download files and use Visual Code with Live Server extension._
 
 *_GeoJSON file is not included for privacy/security reasons._ 
+
+![Map Legend with Information Box](map_03.png)
